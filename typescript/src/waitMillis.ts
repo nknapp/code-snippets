@@ -5,9 +5,16 @@
  * @param millis timeout of the promise
  * @param signal the abort-signal that aborts the sig... the promise
  */
-export function waitMillis(millis: number, signal?: AbortSignal): Promise<void> {
+export function waitMillis(
+  millis: number,
+  signal?: AbortSignal
+): Promise<void> {
   return new Promise<void>((resolve) => {
-    const timeoutHandle = setTimeout(resolve, millis);
-    signal?.addEventListener("abort", () => clearTimeout(timeoutHandle));
+    const cancel = () => clearTimeout(timeoutHandle);
+    const timeoutHandle = setTimeout(() => {
+      signal?.removeEventListener("abort", cancel);
+      resolve()
+    }, millis);
+    signal?.addEventListener("abort", cancel);
   });
 }
