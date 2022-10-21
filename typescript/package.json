@@ -17,5 +17,9 @@
   "scripts": {
     "test": "vitest",
     "format": "prettier -w src"
+  },
+  "dependencies": {
+    "idb-keyval": "^6.2.0",
+    "msw": "^0.47.4"
   }
 }
